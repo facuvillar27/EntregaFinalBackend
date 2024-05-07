@@ -1,0 +1,183 @@
+/api/products:
+  get:
+    summary: Get all products
+    tags:
+      - Products
+    responses:
+      '200':
+        description: Products list successfully retrieved
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Product'
+      '500':
+        description: Internal server error
+/api/products/{pid}:
+  get:
+    summary: Get product by id
+    tags:
+      - Products
+    parameters:
+      - name: pid
+        in: path
+        required: true
+        description: Product id
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Product successfully retrieved
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      '404':
+        description: Product not found
+      '500':
+        description: Internal server error
+  put:
+    summary: Update product by id
+    tags:
+      - Products
+    parameters:
+      - name: pid
+        in: path
+        required: true
+        description: Product id
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/requestBodies/createProduct'
+    responses:
+      '200':
+        description: Product successfully updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      '404':
+        description: Product not found
+      '500':
+        description: Internal server error
+/api/products/{uid}:
+  post:
+    summary: Create a new product
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/requestBodies/createProduct'
+    responses:
+      '200':
+        description: Product successfully created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      '500':
+        description: Internal server error
+  delete:
+    summary: Delete product by id
+    tags:
+      - Products
+    parameters:
+      - name: pid
+        in: path
+        required: true
+        description: Product id
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Product successfully deleted
+      '404':
+        description: Product not found
+      '500':
+        description: Internal server error
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: mongo auto generated id
+        title:
+          type: String
+        description:
+          type: String
+        price:
+          type: Number
+        thumbnail:
+          type: String
+        code:
+          type: String
+        stock:
+          type: Number
+        status:
+          type: Boolean
+        category:
+          type: String
+        owner:
+          type: ObjectId
+          description: user email from mongo model
+      example:
+        _id: ObjectId("5f5f5f5f5f5f5f5f5f5f5f5f")
+        title: "Product 1"
+        description: "Este es el producto 1"
+        price: 1000
+        thumbnail: "Sin imagen"
+        code: "abc123"
+        stock: 10
+        status: true
+        category: "Categoria 1"
+  requestBodies:
+    createProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Product title
+        description:
+          type: string
+          description: Product description
+        price:
+          type: number
+          description: Product price
+        thumbnail:
+          type: string
+          description: Product thumbnail
+        code:
+          type: string
+          description: Product code
+        stock:
+          type: number
+          description: Product stock
+        status:
+          type: boolean
+          description: Product status
+        category:
+          type: string
+          description: Product category
+        owner:
+          type: string
+          description: Product owner
+      example:
+        title: "Product 1"
+        description: "Este es el producto 1"
+        price: 1000
+        thumbnail: "Sin imagen"
+        code: "abc123"
+        stock: 10
+        status: true
+        category: "Categoria 1"
+        owner: "user@gmail.com"
+        

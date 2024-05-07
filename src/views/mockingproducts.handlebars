@@ -1,0 +1,18 @@
+<div>
+
+    <h1>Lista de Productos</h1>
+    <ul>
+        {{#each products}}
+            <li>
+                <h2>{{title}}</h2>
+                <p>Precio: {{price}}</p>
+                <p>Descripción: {{description}}</p>
+                <img src="{{thumbnail}}" alt="{{title}}">
+                <p>Código: {{code}}</p>
+                <p>Stock: {{stock}}</p>
+                <p>Estado: {{#if status}}Disponible{{else}}No Disponible{{/if}}</p>
+                <p>Categoría: {{category}}</p>
+            </li>
+        {{/each}}
+    </ul>
+</div>

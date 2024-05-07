@@ -1,0 +1,18 @@
+<div>
+    <h1>Carrito</h1>
+    <ul>
+        {{#each cartProducts}}
+            <li>
+                <h2>{{ this.product.title }}</h2>
+                <p>Quantity: {{this.quantity}}</p>
+                <p>Precio: {{ this.product.price }}</p>
+            </li>
+        {{/each}}
+    </ul>
+    <p>Total: {{total}}</p>
+    <button class="buy">Comprar</button>
+    <button class="emptyCartButton">Vaciar carrito</button>
+    <a href="/perfil">Volver a la tienda</a>
+</div>
+
+<script src="js/cart.js"></script>

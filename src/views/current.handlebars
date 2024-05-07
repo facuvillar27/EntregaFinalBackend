@@ -1,0 +1,24 @@
+<div class="profile">
+    <div class="avatar">
+        <img src="https://picsum.photos/200/200" alt="{{user.first_name}}">
+    </div>
+    <div>
+        <h1>{{user.first_name}} {{user.last_name}} </h1>
+        <p>Email: {{user.email}}</p>
+        <p>Age: {{user.age}}</p>
+        <p>Role: {{user.role}}</p>
+    </div>
+    <div>
+        <p>mi carrito</p>
+        <ul>
+            {{#each cartProducts}}
+                <li>
+                    <h2>{{ this.product.title }}</h2>
+                    <p>Quantity: {{this.quantity}}</p>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+
+    <div>
+</div>

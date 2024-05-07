@@ -1,0 +1,10 @@
+/api/users:
+  get:
+    summary: Get all users
+    tags:
+      - Users
+    responses:
+      '200':
+        description: Users list successfully retrieved
+      '500':
+        description: Internal server error

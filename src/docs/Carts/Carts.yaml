@@ -1,0 +1,71 @@
+/api/carts:
+  get:
+    summary: Get all products in the cart
+    tags:
+      - Carts
+    responses:
+      '200':
+        description: Products in the cart successfully retrieved
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Cart'
+      '500':
+        description: Internal server error
+/api/carts/{cid}/purchase:
+  post:
+    summary: Purchase the products in the cart
+    tags:
+      - Carts
+    parameters:
+      - name: cid
+        in: path
+        required: true
+        description: Cart id
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Products in the cart successfully purchased
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Purchase successful
+      '404':
+        description: Cart not found
+      '500':
+        description: Internal server error
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: mongo auto-generated ObjectId
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: ObjectId
+                description: mongo ObjectId
+              quantity:
+                type: number
+                description: Quantity of the product in the cart
+      example:
+        _id: ObjectId("5f5f5f5f5f5f5f5f5f5f5f5f")
+        products:
+          - product: ObjectId("4b4b4b4b4b4b4b4b4b4b4b4b")
+            quantity: 2
+          - product: ObjectId("2a2a2a2a2a2a2a2a2a2a2a2a")
+            quantity: 1
+  

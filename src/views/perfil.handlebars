@@ -1,0 +1,41 @@
+<div class="profile">
+    <div class="avatar">
+        <img src="https://picsum.photos/200/200" alt="{{user.first_name}}">
+    </div>
+    <div>
+        <h1>{{user.first_name}} {{user.last_name}} </h1>
+        <p>Email: {{user.email}}</p>
+        <p>Role: {{user.role}}</p>
+    </div>
+    <div>
+        <p>mi carrito</p>
+        <ul>
+            {{#each cartProducts}}
+                <li>
+                    <h2>{{ this.product.title }}</h2>
+                    <p>Quantity: {{this.quantity}}</p>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+    <div>
+        <a href="/cart">Comprar</a>
+        <button class="emptyCartButton">Vaciar carrito</button>
+    </div>
+</div>
+
+<div class="profile">
+    <ul>
+        {{#each product}}
+            <li>
+                <h2>{{ this.title }}</h2>
+                <p>{{this.description}}</p>
+                <p>${{this.price}}</p>
+                <p>{{this.stock}}</p>
+                <button class="agregar" id={{this._id}} >Agregar al carrito</button>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+
+<script src="js/perfil.js"></script>
