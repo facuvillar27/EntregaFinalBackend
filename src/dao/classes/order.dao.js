@@ -10,7 +10,7 @@ class OrderDao {
         }
     }
 
-    getOrderById = async (id) => {
+    getById = async (id) => {
         try {
             const order = await orderModel.findById(id);
             return order;

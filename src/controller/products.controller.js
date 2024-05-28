@@ -2,10 +2,11 @@
 // import DAO from "../dao/index.js";
 
 // import Products from "../dao/dbManagers/products.js"
-import { productService } from "../repository/index.js";
+import { productService, userService } from "../repository/index.js";
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enum.js";
 import { generateProductErrorInfo } from "../services/errors/info.js";
+import MailingService from "../services/mailing.js";
 
 // const productService = new DAO.Product();
 // const userService = new DAO.User();
@@ -86,6 +87,27 @@ const deleteProduct = async (req, res, next) => {
         if (!existingProduct) {
             return res.status(404).json({ error: "Producto no encontrado" })
         }
+
+        const user = await userService.getUserById(existingProduct.owner)
+        if (user && user.role === "premium") {
+            const mailer = new MailingService();
+            await mailer.sendSimpleMail({
+                from: "Ecommmerce",
+                to: user.email,
+
+                html:`
+                <div style="background-color: #ffffff; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);">
+                    <h2 style="text-align: center; color: #333;">Producto Eliminado</h2>
+                    <p>Estimado/a ${user.first_name},</p>
+                    <p>Te informamos que tu producto "${existingProduct.title}" ha sido eliminado de nuestro catálogo.</p>
+                    <p>Si tienes alguna pregunta o necesitas más información, por favor contacta con nuestro soporte.</p>
+                    <p>Atentamente,</p>
+                    <p><strong>Ecommerce</strong><br>
+                </div>
+                `,
+            });
+        }
+        
         const response = await productService.deleteProduct(pid)
         const message = "Producto eliminado";
         const errorMessage = `Error de base de datos: Error al eliminar el producto`;

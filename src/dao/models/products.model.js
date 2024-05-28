@@ -31,7 +31,6 @@ const ProductSchema = new mongoose.Schema({
     },
     status: {
         type: Boolean,
-        required: true,
         default: true,
     },
     category: {

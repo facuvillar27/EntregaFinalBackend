@@ -87,3 +87,235 @@
 {"level":"error","message":"Authentication error. User not authenticated."}
 {"level":"error","message":"Authentication error. User not authenticated."}
 {"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"User already exists"}
+{"level":"error","message":"User already exists"}
+{"level":"error","message":"User already exists"}
+{"level":"error","message":"Type data error"}
+{"level":"error","message":"Type data error"}
+{"level":"error","message":"Type data error"}
+{"level":"error","message":"Type data error"}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"Error de autenticación. El token no pudo ser verificado."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"La cabecera de autorización no está presente."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"User already exists"}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Authentication error. Fail to authenticate user."}
+{"level":"error","message":"Invalid types error: User already has a cart"}
+{"level":"error","message":"Invalid types error: User already has a cart"}
+{"level":"error","message":"Invalid types error: User already has a cart"}
+{"level":"error","message":"Invalid types error: User already has a cart"}
+{"level":"error","message":"Invalid types error: User already has a cart"}
+{"level":"error","message":"Invalid types error: User already has a cart"}
+{"level":"error","message":"Invalid types error: User already has a cart"}
+{"level":"error","message":"Invalid types error: User already has a cart"}
+{"level":"error","message":"Invalid types error: User already has a cart"}
+{"level":"error","message":"Invalid types error: User already has a cart"}
+{"level":"error","message":"Invalid types error: User already has a cart"}
+{"level":"error","message":"Invalid types error: User already has a cart"}
+{"level":"error","message":"Invalid types error: User already has a cart"}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Base date error: Error getting cart"}
+{"level":"error","message":"Base date error: Error getting cart"}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"Authentication error: User cannot add own product to cart"}
+{"level":"error","message":"Type data error"}
+{"level":"error","message":"Type data error"}
+{"level":"error","message":"Type data error"}
+{"level":"error","message":"Type data error"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"Authentication error: User cannot add own product to cart"}
+{"level":"error","message":"Authentication error: User cannot add own product to cart"}
+{"level":"error","message":"Authentication error: User cannot add own product to cart"}
+{"level":"error","message":"Authentication error: User cannot add own product to cart"}
+{"level":"error","message":"Authentication error: User cannot add own product to cart"}
+{"level":"error","message":"Authentication error: User cannot add own product to cart"}
+{"level":"error","message":"Authentication error: User cannot add own product to cart"}
+{"level":"error","message":"Authentication error: User cannot add own product to cart"}
+{"level":"error","message":"Authentication error: User cannot add own product to cart"}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"Authentication error. User not authorized."}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}

@@ -3,16 +3,19 @@
     <ul>
         {{#each cartProducts}}
             <li>
-                <h2>{{ this.product.title }}</h2>
-                <p>Quantity: {{this.quantity}}</p>
-                <p>Precio: {{ this.product.price }}</p>
+                <h2>{{title}}</h2>
+                <p>Quantity: {{quantity}}</p>
+                <p>Precio: {{price}}</p>
+                <p>Subtotal: {{subtotal}}</p>
             </li>
         {{/each}}
     </ul>
     <p>Total: {{total}}</p>
-    <button class="buy">Comprar</button>
-    <button class="emptyCartButton">Vaciar carrito</button>
+    <button class="buy" id={{cid}}>Comprar</button>
+    <button class="emptyCartButton" id={{cid}} >Vaciar carrito</button>
     <a href="/perfil">Volver a la tienda</a>
 </div>
+
+
 
 <script src="js/cart.js"></script>

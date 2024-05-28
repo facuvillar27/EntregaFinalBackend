@@ -1,0 +1,32 @@
+<div>
+    <h1>Administrar Usuarios</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each userRender}}
+            <tr>
+                <td>{{this.first_name}} {{this.last_name}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.role}}</td>
+                <td class="actions">
+                    <form action="/api/users/premium/{{this.id}}" method="PUT">
+                        <select name="role">
+                            <option value="user" {{#if (eq this.role "user")}}selected{{/if}}>User</option>
+                            <option value="premium" {{#if (eq this.role "premium")}}selected{{/if}}>Premium</option>
+                        </select>
+                        <button type="submit">Actualizar Rol</button>
+                    </form>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+

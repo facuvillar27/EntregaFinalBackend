@@ -2,14 +2,31 @@ import { userService } from "../repository/index.js";
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enum.js";
 import { generateSessionErrorInfo } from "../services/errors/info.js";
+import MailingService from "../services/mailing.js";
+import { ObjectId } from "mongodb";
+
+async function getUsers(req, res, next) {
+    try {
+        const users = await userService.getAllUsers({}, 'first_name last_name email role');
+        const formattedUsers = users.map(user => ({
+            name: `${user.first_name} ${user.last_name}`,
+            email: user.email,
+            role: user.role
+        }));
+        req.logger.info(`Users retrieved`);
+        res.status(200).json(formattedUsers);
+    } catch (error) {
+        next(error);
+    }
+}
 
 async function updateUserRole(req, res, next){
-    const { role } = req.body;
-    const { uid } = req.params;
-    const username = uid;
+    const role = req.query.role;
+    const uid = req.params.uid;
+    const objectId = new ObjectId(uid);
     try {
-        if (!role || !username) {
-            const result = [role, username]
+        if (!role || !uid) {
+            const result = [role, uid]
             req.logger.error(`type of data error: Error updating user role`);
             CustomError.createError({
                 name: "Type of data error",
@@ -18,8 +35,11 @@ async function updateUserRole(req, res, next){
                 code: EErrors.INVALID_TYPES_ERROR,
             })
         }
-        const user = await userService.getUserById(username);
-        if (user.length === 0) {
+        console.log(objectId)
+        const user = await userService.getUserByParams({ _id: objectId });
+        console.log(user)
+        const username = user[0].email;
+        if (!user) {
             req.logger.error(`Error on database: User not found`);
             CustomError.createError({
                 name: "Error on database",
@@ -29,25 +49,27 @@ async function updateUserRole(req, res, next){
             })
         }
 
-        if (role === "premium" && user.role !== "premium") {
-            const requiredDocs = ["Identificacion", "Comprobante de domicilio", "Comprobante de estado de cuenta"];
-            const userDocs = user.documents.map(doc => doc.name);
-            const hasAllDocs = requiredDocs.every(doc => userDocs.includes(doc));
+        // if (role === "premium" && user.role !== "premium") {
+        //     const requiredDocs = ["Identificacion", "Comprobante de domicilio", "Comprobante de estado de cuenta"];
+        //     const userDocs = user.documents.map(doc => doc.name);
+        //     const hasAllDocs = requiredDocs.every(doc => userDocs.includes(doc));
 
-            if (!hasAllDocs) {
-                req.logger.error(`Error updating user role: Missing documents`);
-                CustomError.createError({
-                    name: "Error updating user role",
-                    cause: generateSessionErrorInfo(userDocs, EErrors.DATABASE_ERROR),
-                    message: "Missing documents",
-                    code: EErrors.DATABASE_ERROR,
-                })
-            }
-        }
+        //     if (!hasAllDocs) {
+        //         req.logger.error(`Error updating user role: Missing documents`);
+        //         CustomError.createError({
+        //             name: "Error updating user role",
+        //             cause: generateSessionErrorInfo(userDocs, EErrors.DATABASE_ERROR),
+        //             message: "Missing documents",
+        //             code: EErrors.DATABASE_ERROR,
+        //         })
+        //     }
+        // }
 
-        await userService.updateUserRole(username, role);
+        await userService.updateUserRole(user, role);
         req.logger.info(`User role updated`);
-        res.status(200).json({ message: "User role updated" });
+        res.redirect(`/admin`);
+        
+        
     } catch (error) {
         next(error);
     }
@@ -91,7 +113,38 @@ async function uploadFiles (req, res, next) {
     }
 }
 
+async function deleteInactiveUsers(req, res, next){
+    try {
+        const inactiveUsers = await userService.getInactiveUsers(30);
+        const mailer = new MailingService();
 
-        
+        const emailPromises = inactiveUsers.map(async user => 
+            mailer.sendSimpleMail({
+                from: "Ecormerce",
+                to: user.email,
+                subject: "Cuenta eliminada por inactividad",
+                html: `
+                <div style="background-color: #ffffff; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);">
+                    <h2 style="text-align: center; color: #333;">Cuenta Eliminada por Inactividad</h2>
+                    <p>Estimado/a ${user.first_name},</p>
+                    <p>Te informamos que tu cuenta ha sido eliminada debido a inactividad en los últimos 30 minutos.</p>
+                    <p>Si crees que esto es un error, por favor contacta con nuestro soporte.</p>
+                    <p>Atentamente,</p>
+                    <p><strong>Ecommerce</strong><br>
+                </div>
+                `,
+            })
+        );
 
-export { updateUserRole, uploadFiles }
+        await Promise.all(emailPromises);
+        await userService.deleteInactiveUsers(inactiveUsers.map(user => user._id));
+
+        req.logger.info(`Inactive users deleted`);
+        res.status(200).json({ message: "Inactive users deleted" });
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+export { getUsers, updateUserRole, uploadFiles, deleteInactiveUsers }

@@ -3,7 +3,6 @@ import { __dirname } from './utils.js';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
 
-import UserCart from './routes/userCart.router.js';
 import CartsRouter from './routes/carts.router.js';
 import SessionsRouter from './routes/sessions.router.js';
 import ViewsRouter from './routes/views.router.js'
@@ -20,6 +19,7 @@ import { initializeJwtStrategy, initializeRegisterStrategy, initializeGithubStra
 import { authToken, authorization } from './utils.js';
 import cookieParser from 'cookie-parser';
 import config from './config/config.js';
+import cors from 'cors';
 
 const app = express();
 const PORT = config.app.PORT;
@@ -28,7 +28,17 @@ const MONGO_URL = config.mongo.URL;
 /**
  * Template engine
  */
-app.engine('handlebars',handlebars.engine());
+app.engine('handlebars',handlebars.engine({
+    layoutsDir: __dirname+'/views/layouts',
+    defaultLayout: 'main',
+    partialsDir: __dirname+'/views/partials',
+    extname: 'handlebars',
+    helpers: {
+        eq: function (a, b) {
+            return a === b;
+        }
+    }
+}));
 app.set('views',__dirname+'/views');
 app.set('view engine','handlebars');
 
@@ -63,10 +73,15 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(addLogger);
 app.use('/apidocs',swaggerUiExpress.serve,swaggerUiExpress.setup(specs));
+app.use(cors({
+    origin: `http://localhost:${PORT}`,
+    methods: ['GET','POST'],
+    allowedHeaders: ['Content-Type','Authorization']
+}));
 
 async function enviroment() {
     try {
-        await mongoose.connect(MONGO_URL);
+        mongoose.connect(MONGO_URL);
         console.log('Database connected');
     } catch (error) {
         console.log(error);
@@ -78,13 +93,13 @@ enviroment();
 
 initializeGithubStrategy();
 initializeRegisterStrategy();
-// initializeJwtStrategy();
-app.use(passport.initialize());
+initializeJwtStrategy();
+
 app.use(cookieParser());
+app.use(passport.initialize());
 
 app.use('/', ViewsRouter)
-app.use('/api/userCart', authToken, authorization("user", "premium"), UserCart);
-app.use('/api/carts', authToken, authorization("user", "premium"), CartsRouter);
+app.use('/api/carts', CartsRouter);
 app.use('/api/products', ProductsRouter);
 app.use('/api/sessions', SessionsRouter);
 app.use('/api/orders', OrdersRouter);

@@ -13,8 +13,28 @@ export default class UsersRepository {
         return result
     }
 
+    async getAllUsers() {
+        const result = await this.dao.getAll()
+        return result
+    }
+
     async getUserById(id) {
         const result = await this.dao.getById(id)
+        return result
+    }
+
+    async updateUser(id, user) {
+        const result = await this.dao.update(id, user)
+        return result
+    }
+
+    async getUserByPasswordResetToken(token) {
+        const result = await this.dao.getByPasswordResetToken(token)
+        return result
+    }
+
+    async getUserByParams(params) {
+        const result = await this.dao.getByParams(params)
         return result
     }
 
@@ -23,8 +43,8 @@ export default class UsersRepository {
         return result
     }
 
-    async updateUserRole (id, role) {
-        const result = await this.dao.updateRole(id, role)
+    async updateUserRole (user, role) {
+        const result = await this.dao.updateRole(user, role)
         return result
     }
 
@@ -40,6 +60,16 @@ export default class UsersRepository {
 
     async updateUserDocuments(uid, documents) {
         const result = await this.dao.updateUserDocuments(uid, documents)
+        return result
+    }
+
+    async getInactiveUsers(minutes) {
+        const result = await this.dao.getInactiveUsers(minutes)
+        return result
+    }
+
+    async deleteInactiveUsers(userIds){
+        const result = await this.dao.deleteUsers(userIds)
         return result
     }
 

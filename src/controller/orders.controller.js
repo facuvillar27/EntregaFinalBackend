@@ -1,9 +1,11 @@
 import { orderService } from '../repository/index.js';
 import { productService } from '../repository/index.js';
+import { userService } from '../repository/index.js';
 import { cartService } from '../repository/index.js';
 import CustomError from '../services/errors/CustomError.js';
 import EErrors from '../services/errors/enum.js';
 import { generateOrderErrorInfo } from '../services/errors/info.js';
+import MailingService from "../services/mailing.js";
 
 const getOrders = async (req, res) => {
     try {
@@ -78,27 +80,116 @@ const resolveOrder = async (req, res) => {
 
 const getPurchase = async (req, res) => {
     const cid = req.params.cid
-    const cart = await cartService.getById(cid).populate("products")
+    const user = await userService.getUserById(req.user.email)
+    const populatedCart = await cartService.populateCart(cid)
+    let productsToOrder = []
+    let total = 0;
 
-    if (!cart) {
+
+    if (!populatedCart) {
         return res.status(404).json({ error: "Carrito no encontrado" })
     }
 
-    const purchaseItems = cart.products.map(async (product) => {
+    const purchaseItems = populatedCart.products.map(async (item) => {
+        const product = item.product
         const productInDb = await productService.getProductById(product._id)
+        console.log(productInDb)
 
-        if (productInDb.stock < product.quantity) {
+        if (productInDb.stock < item.quantity) {
             return {success: false, message: 'No hay stock suficiente para el producto', productId: product._id}
         }
 
-        productInDb.stock -= product.quantity
+        productInDb.stock -= item.quantity
         await productInDb.save()
+        total += product.price * item.quantity
+        productsToOrder.push(item)
 
-        return {success: true, message: 'Producto comprado', productId: product._id}
     })
-    const result = await Promise.all(purchaseItems)
 
-    res.send({message: "Compra realizada", result})
+    try {
+        await Promise.all(purchaseItems)
+
+        const order = {
+            amount: total,
+            purchaser: user.email,
+        };
+
+        const result = await orderService.createOrder(order);
+        await sendOrderMail(result._id.toString(), user)
+        emptyCart(cid)
+        req.logger.info(`Order created: ${JSON.stringify(result)}`);
+        res.json({ message: "Compra realizada", result });
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: "Error al realizar la compra" })
+    }
+}
+
+const emptyCart = async (cid) => {
+    try {
+        if (!cid) {
+            req.logger.error("Invalid types error: Valid cart id is required");
+            CustomError.createError({
+                name: "Invalid types error",
+                cause: generateCartErrorInfo(cid, EErrors.INVALID_TYPES_ERROR),
+                message: "Error emptying cart",
+                code: EErrors.INVALID_TYPES_ERROR,
+            });
+        }
+        const cart = await cartService.getCartById(cid);
+
+        if (!cart) {
+            req.logger.error("Base date error: Error getting cart");
+            CustomError.createError({
+                name: "Database error",
+                cause: generateCartErrorInfo(cart, EErrors.DATABASE_ERROR),
+                message: "Error getting cart",
+                code: EErrors.DATABASE_ERROR,
+            });
+        } else {
+            cart.products = [];
+            const result = await cartService.updateCart(cid, cart);
+            if (!result) {
+                req.logger.error("Base date error: Error empting cart");
+                CustomError.createError({
+                    name: "Database error",
+                    cause: generateCartErrorInfo(cart, EErrors.DATABASE_ERROR),
+                    message: "Error empting cart",
+                    code: EErrors.DATABASE_ERROR,
+                });
+            } else {
+                console.log("Cart emptied");
+            }
+        } 
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const sendOrderMail = async (oid, user) => {
+    const order = await orderService.getOrderById(oid);
+    if (!order) {
+        return res.status(404).json({ error: "Orden no encontrada" });
+    }
+
+    const mailer = new MailingService();
+            await mailer.sendSimpleMail({
+                from: "Ecommmerce",
+                to: user.email,
+                subject: "Orden finalizada",
+
+                html:`
+                <div style="background-color: #ffffff; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);">
+                    <h2 style="text-align: center; color: #333;">Orden finalizada</h2>
+                    <p>Estimado/a ${user.first_name},</p>
+                    <p>La orden con id ${oid} ha sido finalizada con éxito.</p>
+                    <p>El monto total de la orden es de $${order.amount}</p>
+                    <p>Si tienes alguna pregunta o necesitas más información, por favor contacta con nuestro soporte.</p>
+                    <p>Atentamente,</p>
+                    <p><strong>Ecommerce</strong><br>
+                </div>
+                `,
+            });
 }
 
 export { getOrders, getOrderById, createOrder, resolveOrder, getPurchase };

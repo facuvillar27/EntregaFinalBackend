@@ -22,28 +22,35 @@ const generateToken = (user) => {
     return token;
 }
 
-const verifyToken = (req, res, next) => {
-    console.log(req.headers);
-    const authHeader = req.headers.authorization;
-    const token = authHeader.split(" ")[1];
-    console.log(token);
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) {
-            req.logger.error(
-                "Error de autenticación. El token no pudo ser verificado."
-            );
-            CustomError.createError({
-                name: "Error de autenticación",
-                cause: generateAuthErrorInfo(token, EErrors.AUTH_ERROR),
-                message: "El token no pudo ser verificado",
-                code: EErrors.AUTH_ERROR,
-            });
-        } else {
-            req.user = user;
-            next();
-        }
-    });
-};
+// const verifyToken = (req, res, next) => {
+//     const authHeader = req.headers.authorization;
+//     console.log("Request headers:", req.headers);
+
+//     if (!authHeader) {
+//         const err = new Error("La cabecera de autorización no está presente.");
+//         req.logger.error(err.message);
+//         return next(err);
+//     }
+
+//     const token = authHeader.split(" ")[1];
+//     console.log("Extracted token:", token);
+//     jwt.verify(token, JWT_SECRET, (err, user) => {
+//         if (err) {
+//             req.logger.error("Error de autenticación. El token no pudo ser verificado.");
+//             const customErr = new CustomError({
+//                 name: "Error de autenticación",
+//                 cause: generateAuthErrorInfo(token, EErrors.AUTH_ERROR),
+//                 message: "El token no pudo ser verificado",
+//                 code: EErrors.AUTH_ERROR,
+//             });
+//             return next(customErr); // Pasar el error personalizado al middleware de errores
+//         } else {
+//             req.user = user;
+//             next();
+//         }
+//     });
+// };
+    
 
 const authToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -58,10 +65,8 @@ const authToken = (req, res, next) => {
         return next(new Error("Authentication error"));
     } else {
         const token = authHeader.split(" ")[1];
-        // const verify = jwt.verify(token, "JWT_SECRET");
-        // console.log("verify", verify);
-        jwt.verify(token, JWT_SECRET, (err, user) => {
-            if (err) {
+        jwt.verify(token, JWT_SECRET, (error, credentials) => {
+            if (error) {
                 console.log("Have an error", err);
                 req.logger.error(
                     "Authentication error. Fail to verify the token."
@@ -74,7 +79,7 @@ const authToken = (req, res, next) => {
                 });
                 return next(new Error("Authentication error"));
             } else {
-                req.user = user;
+                req.user = credentials.user;
                 next();
             }
         });
@@ -100,7 +105,6 @@ const passportCall = (strategy) => {
                 })
                 return next(error)
             }
-            console.log(user)
             if (!user) {
                 req.logger.error(
                     "Authentication error. User not authenticated."
@@ -121,6 +125,8 @@ const passportCall = (strategy) => {
         })(req, res, next);
     }
 }
+
+
 
 const authorization = (...roles) => {
     return async (req,res,next) => {
@@ -176,7 +182,7 @@ export {
     createHash,
     isValidPassword,
     generateToken,
-    verifyToken,
+    // // verifyToken,
     authToken,
     passportCall,
     authorization,

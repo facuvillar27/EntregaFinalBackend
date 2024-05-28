@@ -4,7 +4,7 @@ import jwt from "passport-jwt";
 import config from "./config.js";
 import GitHubStrategy from 'passport-github2';
 import { userService } from "../repository/index.js";
-import { createHash } from "../utils.js";
+import { createHash, generateToken } from "../utils.js";
 import CustomError from '../services/errors/CustomError.js'
 import EErors from '../services/errors/enum.js';
 import { generateAuthErrorInfo } from '../services/errors/info.js';
@@ -24,13 +24,11 @@ const initializeJwtStrategy = () => {
         new JWTStrategy(
             {
                 secretOrKey: JWT_SECRET,
-                jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
+                jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor])
             },
             async (jwt_payload, done) => {
-                console.log(jwt_payload)
                 try {
                     const user = await userService.getUserById(jwt_payload.user.username);
-                    console.log(user)
                     if (!user) {
                         const error = new CustomError({
                             name: "Authentication Error",
@@ -40,7 +38,7 @@ const initializeJwtStrategy = () => {
                         })
                         return done(error)
                     } else {
-                        return done(null, jwt_payload);
+                        return done(null, user);
                     }
                 } catch (error) {
                     done(error)
@@ -49,6 +47,17 @@ const initializeJwtStrategy = () => {
         )
     )
 }
+
+const cookieExtractor = (req) => {
+    let token = null;
+    if (req && req.cookies) {
+        token = req.cookies["coderCookie"];
+    }
+    return token;
+}
+
+
+
 
 
 const initializeRegisterStrategy = () => {
@@ -65,8 +74,7 @@ const initializeRegisterStrategy = () => {
                 const role = email === ADMIN_ID || password === ADMIN_PASSWORD ? "admin" : "user";
                 try {
                     const user = await userService.getUserById(email);
-                    console.log(user)
-                    if (user.length > 0) {
+                    if (user) {
                         req.logger.error("User already exists");
                         CustomError.createError({
                             name: "Authentication Error",
@@ -74,8 +82,10 @@ const initializeRegisterStrategy = () => {
                             message: "User already exists",
                             code: EErors.AUTH_ERROR
                         })
+                        return done(error)
                         
                     } else {
+                        console.log("user.length es menor a 0")
                         const newUser = {
                             first_name,
                             last_name,
@@ -83,7 +93,9 @@ const initializeRegisterStrategy = () => {
                             password: createHash(password),
                             role
                         };
+                        const acces_token = generateToken(newUser);
                         const result = await userService.signupUser(newUser);
+
                         return done(null, result);
                     }
                 } catch (error) {

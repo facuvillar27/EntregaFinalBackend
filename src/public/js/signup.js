@@ -6,7 +6,7 @@ async function postSignup(first_name, last_name, email, password, age) {
         password,
         age: parseInt(age)
     }
-    const response = await fetch('/api/sessions/register', {
+    const response = await fetch('/api/sessions/signup', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -29,10 +29,5 @@ signupForm.addEventListener('submit', async (event) => {
     const age = document.getElementById('age').value
 
     const result = await postSignup(first_name, last_name, email, password, age)
-    if (result.status === 'success') {
     window.location.href = '/'
-} else {
-    alert('Error al crear el usuario')
-}
-
 })

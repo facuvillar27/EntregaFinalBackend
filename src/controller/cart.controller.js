@@ -1,5 +1,6 @@
 import { cartService } from "../repository/index.js";
 import { productService } from "../repository/index.js";
+import { userService } from "../repository/index.js";
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enum.js";
 import { generateCartErrorInfo, generateAuthErrorInfo } from "../services/errors/info.js";
@@ -84,42 +85,34 @@ const populatedCart = async (req, res, next) => {
     }
 }
 
-const createCart = async (req, res, next) => {
-    const newCart = req.body;
+const createCart = async (user) => {
     try {
-        if (!newCart) {
-            req.logger.error("Invalid types error: Valid cart is required");
-            CustomError.createError({
-                name: "Invalid types error",
-                cause: generateCartErrorInfo(newCart, EErrors.INVALID_TYPES_ERROR),
-                message: "Error creating cart",
-                code: EErrors.INVALID_TYPES_ERROR,
-            });
-        }
-        const result = await cartService.createCart(newCart);
-        if(!result.products) {
-            req.logger.error("Base date error: Error creating cart");
-            CustomError.createError({
-                name: "Database error",
-                cause: generateCartErrorInfo(result, EErrors.DATABASE_ERROR),
-                message: "Error creating cart",
-                code: EErrors.DATABASE_ERROR,
-            });
+        if (user.carts.length > 0) {
+
         } else {
-            req.logger.info("Cart created");
-            res.json({ message: "Cart created", data: newCart });
+            const newCart = await cartService.createCart({ products: [] });
+            const result = await userService.updateUserCart(user._id, { carts: newCart._id });
+                if (!result) {
+                    CustomError.createError({
+                        name: "Database error",
+                        cause: generateCartErrorInfo(newCart, EErrors.DATABASE_ERROR),
+                        message: "Error creating cart",
+                        code: EErrors.DATABASE_ERROR,
+                    });
+                }
+            return newCart;
         }
     } catch (err) {
-        next(err);
+        console.log(err);
     }
 }
 
 const manageCartProducts = async (req, res, next) => {
-    const cid = req.params.cid;
+    const user = await userService.getUserById(req.user.email);
     const pid = req.params.pid;
-    const { op } = req.body;
+    createCart(user);
     try {
-        if (!cid || !pid || !op) {
+        if (!pid) {
             req.logger.error("Invalid types error: Valid cart and product id are required");
             CustomError.createError({
                 name: "Invalid types error",
@@ -128,53 +121,36 @@ const manageCartProducts = async (req, res, next) => {
                 code: EErrors.INVALID_TYPES_ERROR,
             });
         }
-        const cart = await cartService.getCartById(cid);
-        if (!cart.products) {
-            req.logger.error("Base date error: Error getting cart");
-            CustomError.createError({
-                name: "Database error",
-                cause: generateCartErrorInfo(cart, EErrors.DATABASE_ERROR),
-                message: "Error getting cart",
-                code: EErrors.DATABASE_ERROR,
-            });
-        } else {
-            const product = await productService.getProductById(pid);
-            console.log(product.owner);
+        const product = await productService.getProductById(pid);
+        const cid = user.carts[0]._id;
 
-            if (product.owner === role) {
-                req.logger.error("Authentication error: User cannot add own product to cart");
-                CustomError.createError({
-                    name: "Authentication error",
-                    cause: generateAuthErrorInfo(cart, EErrors.AUTH_ERROR),
-                    message: "User cannot add own product to cart",
-                    code: EErrors.AUTH_ERROR,
-                });
-                res.json({ status: "error", message: "User cannot add own product to cart" });
+        if (product.owner === user.email) {
+            req.logger.error("Authentication error: User cannot add own product to cart");
+            res.json({ status: "error", message: "User cannot add own product to cart" });
+        } else {
+            const cart = await cartService.getCartById(cid);
+            const productExist = cart.products.findIndex((product) => product.product.toString() === pid);
+            if (productExist == -1) {
+                cart.products.push({ product: pid, quantity: 1 });
             } else {
-                const productExist = cart.products.findIndex((product) => product.product === pid);
-                if (productExist == -1) {
-                    cart.products.push({ product: pid, quantity: 1 });
-                } else {
-                    if (op === "add") {
-                        cart.products[productExist].quantity += 1;
-                    } else if (op === "remove") {
-                        cart.products[productExist].quantity -= 1;
-                    }
-                }
-                const result = await cartService.updateCart(cid, cart);
-                if (!result) {
-                    CustomError.createError({
-                        name: "Database error",
-                        cause: generateCartErrorInfo(cart, EErrors.DATABASE_ERROR),
-                        message: "Error updating cart",
-                        code: EErrors.DATABASE_ERROR,
-                    });
-                } else {
-                    req.logger.info("Product added to cart");
-                    res.json({ message: "Product added to cart", data: cart });
-                }
+                cart.products[productExist].quantity += 1;
+            }
+            const result = await cartService.updateCart(cid, cart);
+    
+            if (!result) {
+                CustomError.createError({
+                    name: "Database error",
+                    cause: generateCartErrorInfo(cart, EErrors.DATABASE_ERROR),
+                    message: "Error updating cart",
+                    code: EErrors.DATABASE_ERROR,
+                });
+            } else {
+                const updatedCart = await cartService.populateCart(cid);
+                req.logger.info("Product added to cart");
+                res.json({ message: "Product added to cart", data: updatedCart });
             }
         }
+
     } catch (err) {
         next(err);
     }
@@ -219,7 +195,7 @@ const removeProductFromCart = async (req, res, next) => {
             });
         } else {
             req.logger.info("Product removed from cart");
-            res.json({ message: "Product removed from cart", data: cart });
+            res.json({ status: success, message: "Product removed from cart", data: cart });
         }
     } catch (err) {
         next(err);
@@ -239,7 +215,8 @@ const emptyCart = async (req, res, next) => {
             });
         }
         const cart = await cartService.getCartById(cid);
-        if (cart.length === 0) {
+
+        if (!cart) {
             req.logger.error("Base date error: Error getting cart");
             CustomError.createError({
                 name: "Database error",

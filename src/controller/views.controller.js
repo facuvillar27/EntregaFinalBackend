@@ -1,5 +1,5 @@
 import DAO from "../dao/index.js";
-import { generateProducts } from "../utils.js";
+import { cartService } from "../repository/index.js";
 
 const userServices = new DAO.User();
 const productServices = new DAO.Product();
@@ -11,31 +11,53 @@ const getUsersAndRender = async (req, res) => {
 }
 
 const getProductsAndRender = async (req, res) => {
-    let products = await productServices.getAllProducts();
+    let products = await productServices.getAll();
     res.render('products', { products });
 }
 
-const getProfile = async (req,res) => {
-    let user = await userServices.getBy({ "email": req.user.email });
-    let product = await productServices.getAllProducts();
-    let cartProducts = user.cart.products;
-    res.render("perfil", {
-        user,
-        product,
-        cartProducts,
-    })
+const getProfileUser = async (req,res,next) => {
+    try {
+        const user = await userServices.getById(req.user.email);
+        const first_name = user.first_name;
+        const last_name = user.last_name;
+        const email = user.email;
+        const role = user.role;
+        const products = await productServices.getAll()
+        res.render("perfil", {
+            first_name,
+            last_name,
+            email,
+            role,
+            products,
+        })
+    } catch (error) {
+        next(error);
+    }
 }
 
 const getCart = async (req,res) => {
-    let user = await userServices.getBy({ "email": req.user.email });
-    let cartProducts = user.cart.products;
+    const user = await userServices.getById(req.user.email );
+    const cid = user.carts[0]._id;
+    const populateCart = await cartService.populateCart(cid);
+    const cartProductTotal = populateCart.products
+    const cartProducts = populateCart.products.map(product => {
+        const subtotal = product.product.price * product.quantity
+        return {
+            title: product.product.title,
+            price: product.product.price,
+            quantity: product.quantity,
+            subtotal,
+        }
+    }
+    );
     let total = 0;
-    cartProducts.forEach(product => {
+    cartProductTotal.forEach(product => {
         total += product.product.price * product.quantity;
     });
     res.render("cart", {
         cartProducts,
-        total
+        total,
+        cid: cid.toString(),
     })
 }
 
@@ -59,4 +81,22 @@ const loggerTester = (req, res) => {
     req.logger.debug(`${req.logDetails.method} - ${req.logDetails.url} - ${req.logDetails.date} - Debug`);
 }
 
-export { getUsersAndRender, getProductsAndRender, getProfile, getCart, getMockingProducts, loggerTester, getForgotPassword};
+const renderAdminView = async (req, res, next) => {
+    try {
+        const users = await userServices.getAll();
+        const userRender = users.map(user => {
+            return {
+                id: user._id.toString(),
+                first_name: user.first_name,
+                last_name: user.last_name,
+                email: user.email,
+                role: user.role,
+            }
+        })
+        res.render('adminManager', { userRender });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export { getUsersAndRender, getProductsAndRender, getProfileUser, getCart, getMockingProducts, loggerTester, getForgotPassword, renderAdminView};

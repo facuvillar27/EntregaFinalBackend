@@ -26,12 +26,55 @@ class UsersDao {
         }
     }
 
+    async getAll() {
+        try {
+            const users = await usersModel.find();
+            return users;
+        }
+        catch (error) {
+            console.error('Error getting users:', error);
+        }
+    }
+
     async getById(uid) {
         try {
-            const user = await usersModel.find({ email: uid });
+            const user = await usersModel.findOne({ email: uid });
             return user
         } catch (error) {
             console.error('Error getting user by id:', error)
+        }
+    }
+
+    async update(id, user) {
+        try {
+            const result = await usersModel.findByIdAndUpdate(id, user);
+            return result;
+        } catch (error) {
+            console.error('Error updating user:', error);
+        }
+    }
+
+    async getByParams(params) {
+        try {
+            const queryObject = {};
+            Object.keys(params).forEach(key => {
+                queryObject[key] = params[key];
+            });
+    
+            const user = await usersModel.find(queryObject);
+            return user;
+        } catch (error) {
+            console.error('Error getting user by params:', error);
+        }
+    }
+    
+
+    async getByPasswordResetToken(token) {
+        try {
+            const user = await usersModel.findOne({ resetPasswordToken: token });
+            return user;
+        } catch (error) {
+            console.error('Error getting user by password reset token:', error);
         }
     }
 
@@ -78,9 +121,9 @@ class UsersDao {
         }
     };
 
-    async updateRole(id, role) {
+    async updateRole(user, role) {
         try {
-            let result = await usersModel.findByIdAndUpdate(id, { role: role });
+            let result = await usersModel.findByIdAndUpdate(user, { role: role });
             return result;
         } catch (error) {
             console.error('Error updating user role:', error);
@@ -116,6 +159,25 @@ class UsersDao {
             return result;
         } catch (error) {
             console.error('Error updating user last connection:', error);
+        }
+    }
+
+    async getInactiveUsers(minutes) {
+        const cutofDate = new Date(Date.now() - minutes * 60 * 1000);
+        try {
+            const users = await usersModel.find({ lastConnection: { $lt: cutofDate } });
+            return users;
+        } catch (error) {
+            console.error('Error getting inactive users:', error);
+        }
+    }
+
+    async deleteUsers(userIds) {
+        try {
+            const result = await usersModel.deleteMany({ _id: { $in: userIds } });
+            return result;
+        } catch (error) {
+            console.error('Error deleting users:', error);
         }
     }
 
