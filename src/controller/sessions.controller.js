@@ -124,7 +124,7 @@ const forgotPassword = async (req, res, next) => {
             await userService.updateUser(uid, user);
 
 
-            const resetURL = `http://localhost:${process.env.PORT}/api/sessions/reset/${user.resetPasswordToken}`;
+            const resetURL = `https://entregafinalbackend-production-3d33.up.railway.app/api/sessions/reset/${user.resetPasswordToken}`;
 
             const mailer = new MailingService();
             const sendEmail = await mailer.sendSimpleMail({
