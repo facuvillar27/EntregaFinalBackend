@@ -1,6 +1,6 @@
 import express from "express"
 import { getAllProducts, getProductById, createProduct, modifyProduct, deleteProduct } from "../controller/products.controller.js"
-import { authToken, authorization } from "../utils.js"
+import { authorization, passportCall } from "../utils.js"
 
 const router = express.Router()
 
@@ -11,7 +11,7 @@ router.get("/", authorization("user", "premium"), getAllProducts)
 router.get("/:pid", authorization("user", "premium"), getProductById)
 
 //create a new product
-router.post("/", createProduct)
+router.post("/", passportCall("jwt", {session: false}), createProduct)
 
 //update a product
 router.put("/:pid", modifyProduct)

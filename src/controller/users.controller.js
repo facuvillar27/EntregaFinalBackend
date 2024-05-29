@@ -20,6 +20,29 @@ async function getUsers(req, res, next) {
     }
 }
 
+async function getPremium(req, res, next) {
+    const user = await userService.getUserById(req.user.email);
+    try {
+        if (!user) {
+            req.logger.error(`Error on database: User not found`);
+            CustomError.createError({
+                name: "Error on database",
+                cause: generateSessionErrorInfo(user, EErrors.DATABASE_ERROR),
+                message: "User not found",
+                code: EErrors.DATABASE_ERROR,
+            })
+        }
+        if (user.role !== "premium") {
+            const userUpdated = await userService.updateUserRole(user, "premium");
+            req.logger.info(`User role updated`);
+        }
+        res.redirect("/api/sessions/current");
+    } catch (error) {
+        next(error);
+    }
+}
+
+
 async function updateUserRole(req, res, next){
     const role = req.query.role;
     const uid = req.params.uid;
@@ -147,4 +170,4 @@ async function deleteInactiveUsers(req, res, next){
 }
 
 
-export { getUsers, updateUserRole, uploadFiles, deleteInactiveUsers }
+export { getUsers, getPremium, updateUserRole, uploadFiles, deleteInactiveUsers }

@@ -84,19 +84,22 @@ const loggerTester = (req, res) => {
 const renderAdminView = async (req, res, next) => {
     try {
         const users = await userServices.getAll();
-        const userRender = users.map(user => {
-            return {
-                id: user._id.toString(),
-                first_name: user.first_name,
-                last_name: user.last_name,
-                email: user.email,
-                role: user.role,
-            }
-        })
+        const filteredUsers = users.filter(user => user.role!== "admin");
+        const userRender = filteredUsers.map(user => ({
+            id: user._id.toString(),
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            role: user.role,
+        }));
         res.render('adminManager', { userRender });
     } catch (error) {
         next(error);
     }
+};
+
+const addProductsManager = async (req, res, next) => {
+    res.render('addProduct');
 }
 
-export { getUsersAndRender, getProductsAndRender, getProfileUser, getCart, getMockingProducts, loggerTester, getForgotPassword, renderAdminView};
+export { getUsersAndRender, getProductsAndRender, getProfileUser, getCart, getMockingProducts, loggerTester, getForgotPassword, renderAdminView, addProductsManager};

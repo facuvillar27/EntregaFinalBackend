@@ -1,4 +1,5 @@
 import { userService } from '../repository/index.js';
+import { cartService } from '../repository/index.js';
 import { generateToken, createHash, isValidPassword } from '../utils.js';
 import CustomError from '../services/errors/CustomError.js';
 import EErrors from '../services/errors/enum.js';
@@ -210,9 +211,30 @@ const updatePassword = async (req, res, next) => {
 }
 
 const currentUser = async (req, res) => {
-    // const user = new UsersDto(req.user);
-    // res.status(200).json({ data: user });
-    res.render('current', { user: req.user });
+    const user = await userService.getUserById(req.user.email);
+    const first_name = user.first_name;
+    const last_name = user.last_name;
+    const email = user.email;
+    const role = user.role;
+    const cid = user.carts[0]._id.toString();
+    const populatedCart = await cartService.populateCart(cid);
+    console.log(populatedCart);
+    const cartProduct = populatedCart.products.map(product => {
+        return {
+            title: product.product.title,
+            price: product.product.price,
+            quantity: product.quantity,
+        }
+    }
+    );
+
+    res.render('current', { 
+        first_name,
+        last_name,
+        email,
+        role,
+        cartProduct
+    });
 }
 
 

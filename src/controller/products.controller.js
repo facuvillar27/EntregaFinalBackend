@@ -41,7 +41,8 @@ const getProductById = async (req, res, next) => {
 }
 
 const createProduct = async (req, res, next) => {
-    const { title, description, code, price, stock, category, owner, thumbnail } = req.body;
+    const owner = req.user.email;
+    const { title, description, code, price, stock, category, thumbnail } = req.body;
     try {
         const product = await productService.createProduct({
             title,

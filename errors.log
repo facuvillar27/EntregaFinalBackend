@@ -319,3 +319,7 @@
 {"level":"error","message":"Authentication error. User not authenticated."}
 {"level":"error","message":"Authentication error. User not authenticated."}
 {"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"Authentication error. User not authenticated."}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"Authentication error: User cannot add own product to cart"}
+{"level":"error","message":"User not found"}

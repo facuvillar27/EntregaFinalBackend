@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import { passportCall} from '../utils.js';
-import { getUsersAndRender, getProductsAndRender, getProfileUser, getCart, getMockingProducts, getForgotPassword, loggerTester, renderAdminView} from '../controller/views.controller.js';
+import { getUsersAndRender, getProductsAndRender, getProfileUser, getCart, getMockingProducts, getForgotPassword, loggerTester, renderAdminView, addProductsManager} from '../controller/views.controller.js';
 
 const router = Router();
 
@@ -29,6 +29,8 @@ router.get('/loggerTest', loggerTester);
 router.get('/forgotPassword', getForgotPassword);
 
 router.get('/admin', passportCall("jwt", {session: false}), renderAdminView)
+
+router.get('/addProduct', passportCall("jwt", {session: false}), addProductsManager)
   
 
 export default router;

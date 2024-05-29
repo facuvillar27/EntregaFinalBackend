@@ -31,7 +31,7 @@ router.post("/forgotPassword", forgotPassword);
     
 router.put("/updatePassword/:token", updatePassword);
 
-router.get("/current", authToken, currentUser);
+router.get("/current", passportCall("jwt"), currentUser);
 
 router.get(
     "/github",
